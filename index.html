@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ousadia - Login</title>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  body { font-family: 'Inter', sans-serif; background-color: #f5f5f5; }
+</style>
+</head>
+<body class="flex items-center justify-center min-h-screen">
+<div class="bg-white p-6 rounded-xl shadow-lg w-96">
+  <h1 class="text-2xl font-bold mb-4 text-center">Ousadia</h1>
+  <button id="google-login" class="w-full bg-red-500 text-white py-2 rounded-lg mb-3 hover:bg-red-600">Entrar com Google</button>
+  <p class="text-center text-gray-500 text-sm">Você será redirecionado ao dashboard após login</p>
+</div>
+
+<script src="firebase-config.js"></script>
+<script>
+  const auth = firebase.auth();
+
+  document.getElementById('google-login').addEventListener('click', () => {
+    const provider = new firebase.auth.GoogleAuthProvider();
+    auth.signInWithPopup(provider)
+      .then((result) => {
+        // Login bem-sucedido
+        window.location.href = 'dashboard.html'; // redireciona para o dashboard
+      })
+      .catch((error) => {
+        alert("Erro ao logar: " + error.message);
+      });
+  });
+</script>
+</body>
+</html>
