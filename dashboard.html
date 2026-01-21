@@ -1,168 +1,135 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Dashboard OusadiaApp</title>
-
-<!-- Firebase v9 -->
-<script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
-  import { getAuth, GoogleAuthProvider, signInWithPopup, signOut } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
-  import { getFirestore, collection, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
-
-  const firebaseConfig = {
-    apiKey: "AIzaSyADQZY0PLEcJUPjr2IxC5fjJmMgHXW3Eio",
-    authDomain: "ousadiaapp.firebaseapp.com",
-    projectId: "ousadiaapp",
-    storageBucket: "ousadiaapp.firebasestorage.app",
-    messagingSenderId: "736839415891",
-    appId: "1:736839415891:web:9335932f5aa4a5689a6ea6"
-  };
-
-  const app = initializeApp(firebaseConfig);
-  const auth = getAuth(app);
-  const db = getFirestore(app);
-  const provider = new GoogleAuthProvider();
-
-  window.loginGoogle = async () => {
-    try {
-      const result = await signInWithPopup(auth, provider);
-      const user = result.user;
-      document.getElementById('user-info').textContent = `Olá, ${user.displayName}`;
-      document.getElementById('login-btn').style.display = 'none';
-      document.getElementById('logout-btn').style.display = 'inline-block';
-
-      await addDoc(collection(db, "usuarios"), {
-        nome: user.displayName,
-        email: user.email,
-        uid: user.uid,
-        loginEm: new Date()
-      });
-
-      loadUsers();
-    } catch (error) {
-      alert("Erro ao fazer login: " + error.message);
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ousadia App - Dashboard</title>
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #ff0000, #ffffff 50%, #0000ff);
+      color: #fff;
     }
-  };
 
-  window.logoutGoogle = async () => {
-    await signOut(auth);
-    document.getElementById('user-info').textContent = '';
-    document.getElementById('login-btn').style.display = 'inline-block';
-    document.getElementById('logout-btn').style.display = 'none';
-  };
+    header {
+      background: rgba(0,0,0,0.7);
+      padding: 15px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    }
 
-  async function loadUsers() {
-    const querySnapshot = await getDocs(collection(db, "usuarios"));
-    const usersList = document.getElementById('users-list');
-    usersList.innerHTML = '';
-    querySnapshot.forEach((doc) => {
-      const li = document.createElement('li');
-      li.textContent = `${doc.data().nome} - ${doc.data().email}`;
-      usersList.appendChild(li);
-    });
-  }
+    header h1 {
+      margin: 0;
+      font-weight: 600;
+      font-size: 20px;
+    }
 
-  window.addEventListener('load', () => {
-    loadUsers();
-  });
-</script>
+    header button {
+      background-color: #fff;
+      color: #ff0000;
+      border: none;
+      padding: 8px 15px;
+      border-radius: 25px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
 
-<style>
-  :root {
-    --red: #d71a23;
-    --blue: #003b71;
-    --white: #ffffff;
-    --green-field: #3b6e3a;
-    --dark-gray: #1a1a1a;
-  }
+    header button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    }
 
-  body {
-    margin: 0;
-    font-family: 'Segoe UI', sans-serif;
-    background: url('https://images.unsplash.com/photo-1569861303094-9b5d91b82a6b?auto=format&fit=crop&w=1470&q=80') no-repeat center center fixed;
-    background-size: cover;
-    color: var(--white);
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 20px;
+      padding: 20px;
+    }
 
-  h1 {
-    margin-top: 20px;
-    font-size: 2rem;
-    text-shadow: 2px 2px rgba(0,0,0,0.6);
-  }
+    .card {
+      background: rgba(0,0,0,0.6);
+      border-radius: 15px;
+      padding: 20px;
+      text-align: center;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.3);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
 
-  button {
-    background-color: var(--red);
-    color: var(--white);
-    border: 2px solid var(--white);
-    padding: 10px 20px;
-    margin: 10px;
-    font-weight: bold;
-    border-radius: 10px;
-    cursor: pointer;
-    transition: transform 0.3s, background-color 0.3s;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.4);
-  }
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+    }
 
-  button:hover {
-    transform: scale(1.05);
-    background-color: var(--blue);
-  }
+    .card h2 {
+      margin: 10px 0 0 0;
+      font-weight: 600;
+    }
 
-  #dashboard {
-    margin-top: 20px;
-    width: 90%;
-    max-width: 500px;
-    background-color: rgba(26,26,26,0.85);
-    padding: 20px;
-    border-radius: 15px;
-    box-shadow: 0 0 20px rgba(0,0,0,0.6);
-    animation: fadeIn 1s ease forwards;
-  }
-
-  @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-
-  ul {
-    list-style: none;
-    padding: 0;
-  }
-
-  li {
-    background-color: rgba(59,110,58,0.8); /* verde gramado */
-    margin: 5px 0;
-    padding: 10px;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.5);
-  }
-
-  #user-info {
-    margin: 10px;
-    font-weight: bold;
-    text-shadow: 1px 1px rgba(0,0,0,0.5);
-  }
-</style>
+    .card p {
+      margin: 5px 0 0 0;
+      font-size: 14px;
+    }
+  </style>
 </head>
 <body>
+  <header>
+    <h1>Ousadia App</h1>
+    <button id="logoutBtn">Sair</button>
+  </header>
 
-<h1>Dashboard OusadiaApp</h1>
+  <div class="cards" id="userCards">
+    <!-- Usuários e dados do Firestore aparecerão aqui -->
+  </div>
 
-<div id="user-info"></div>
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
+    import { getAuth, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
+    import { getFirestore, collection, getDocs, addDoc } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
 
-<button id="login-btn" onclick="loginGoogle()">Entrar com Google</button>
-<button id="logout-btn" onclick="logoutGoogle()" style="display:none;">Sair</button>
+    const firebaseConfig = {
+      apiKey: "AIzaSyADQZY0PLEcJUPjr2IxC5fjJmMgHXW3Eio",
+      authDomain: "ousadiaapp.firebaseapp.com",
+      projectId: "ousadiaapp",
+      storageBucket: "ousadiaapp.firebasestorage.app",
+      messagingSenderId: "736839415891",
+      appId: "1:736839415891:web:9335932f5aa4a5689a6ea6"
+    };
 
-<div id="dashboard">
-  <h2>Usuários Logados:</h2>
-  <ul id="users-list"></ul>
-</div>
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
 
+    const userCards = document.getElementById("userCards");
+
+    // Monitorar login
+    onAuthStateChanged(auth, async user => {
+      if (!user) {
+        window.location.href = "index.html";
+      } else {
+        // Pegar usuários do Firestore
+        const querySnapshot = await getDocs(collection(db, "usuarios"));
+        userCards.innerHTML = "";
+        querySnapshot.forEach(doc => {
+          const data = doc.data();
+          userCards.innerHTML += `
+            <div class="card">
+              <h2>${data.nome || user.displayName}</h2>
+              <p>${data.email || user.email}</p>
+            </div>
+          `;
+        });
+      }
+    });
+
+    // Logout
+    document.getElementById("logoutBtn").addEventListener("click", () => {
+      signOut(auth);
+    });
+  </script>
 </body>
 </html>
