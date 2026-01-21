@@ -3,40 +3,27 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Login Ousadia</title>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<title>Ousadia - Login</title>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js"></script>
 <script src="firebase-config.js"></script>
-<style>
-  body { font-family: Arial; text-align: center; margin-top: 100px; }
-  button { padding: 10px 20px; font-size: 16px; cursor: pointer; }
-</style>
-</head>
-<body>
-
-<h1>Bem-vindo ao Ousadia App</h1>
-<button id="googleLogin">Login com Google</button>
-
 <script>
-const auth = firebase.auth();
-const provider = new firebase.auth.GoogleAuthProvider();
-
-document.getElementById('googleLogin').addEventListener('click', () => {
-  auth.signInWithPopup(provider)
-    .then(result => {
-      // Login bem-sucedido, redireciona para dashboard
-      window.location.href = 'dashboard.html';
-    })
-    .catch(error => {
-      alert('Erro no login: ' + error.message);
-    });
-});
-
-// Verifica se já está logado
-auth.onAuthStateChanged(user => {
-  if(user) window.location.href = 'dashboard.html';
-});
+  function loginGoogle() {
+    auth.signInWithPopup(provider)
+      .then(result => {
+        // Login bem-sucedido
+        window.location.href = 'dashboard.html';
+      })
+      .catch(error => {
+        alert("Erro no login: " + error.message);
+      });
+  }
 </script>
-
+</head>
+<body style="display:flex;justify-content:center;align-items:center;height:100vh;flex-direction:column;">
+  <h1>Bem-vindo ao Ousadia</h1>
+  <button onclick="loginGoogle()" style="padding:12px 24px;background:#00c753;color:black;font-weight:bold;border:none;border-radius:8px;cursor:pointer;">
+    Entrar com Google
+  </button>
 </body>
 </html>
