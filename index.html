@@ -1,109 +1,31 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Ousadia App - Login</title>
-  <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
-  <style>
-    body {
-      margin: 0;
-      font-family: 'Poppins', sans-serif;
-      background: linear-gradient(135deg, #ff0000, #ffffff 50%, #0000ff);
-      color: #fff;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      overflow: hidden;
-    }
-
-    .login-container {
-      background: rgba(0,0,0,0.6);
-      padding: 40px;
-      border-radius: 15px;
-      text-align: center;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.5);
-      width: 90%;
-      max-width: 400px;
-      animation: fadeIn 1s ease-out;
-    }
-
-    .login-container h1 {
-      margin-bottom: 30px;
-      font-weight: 600;
-      color: #fff;
-    }
-
-    .btn-google {
-      background-color: #ffffff;
-      color: #ff0000;
-      font-weight: 600;
-      padding: 12px 20px;
-      border: none;
-      border-radius: 50px;
-      cursor: pointer;
-      width: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-      transition: all 0.3s ease;
-    }
-
-    .btn-google:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 6px 15px rgba(0,0,0,0.3);
-    }
-
-    .btn-google img {
-      width: 20px;
-      height: 20px;
-    }
-
-    @keyframes fadeIn {
-      from {opacity: 0; transform: translateY(-20px);}
-      to {opacity: 1; transform: translateY(0);}
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ousadia App</title>
+<link rel="stylesheet" href="style.css">
+<script type="module" src="firebase-config.js"></script>
 </head>
 <body>
-  <div class="login-container">
-    <h1>Ousadia App</h1>
-    <button class="btn-google" id="googleLogin">
-      <img src="https://img.icons8.com/color/48/000000/google-logo.png" alt="Google Logo">
-      Entrar com Google
-    </button>
-  </div>
+<div class="login-container">
+  <h1>Ousadia App</h1>
+  <button class="btn-google" id="btnGoogle">Entrar com Google</button>
+</div>
 
-  <!-- Firebase v9 -->
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
-    import { getAuth, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
+<script type="module">
+import { auth, provider, signInWithPopup } from './firebase-config.js';
 
-    const firebaseConfig = {
-      apiKey: "AIzaSyADQZY0PLEcJUPjr2IxC5fjJmMgHXW3Eio",
-      authDomain: "ousadiaapp.firebaseapp.com",
-      projectId: "ousadiaapp",
-      storageBucket: "ousadiaapp.firebasestorage.app",
-      messagingSenderId: "736839415891",
-      appId: "1:736839415891:web:9335932f5aa4a5689a6ea6"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    const provider = new GoogleAuthProvider();
-
-    document.getElementById("googleLogin").addEventListener("click", async () => {
-      try {
-        const result = await signInWithPopup(auth, provider);
-        // Redireciona para dashboard
-        window.location.href = "dashboard.html";
-      } catch (error) {
-        alert("Erro no login: " + error.message);
-      }
-    });
-  </script>
+document.getElementById('btnGoogle').addEventListener('click', async () => {
+  try {
+    const result = await signInWithPopup(auth, provider);
+    const user = result.user;
+    // Redireciona para o dashboard após login
+    window.location.href = 'dashboard.html';
+  } catch (error) {
+    alert('Erro ao logar: ' + error.message);
+  }
+});
+</script>
 </body>
 </html>
