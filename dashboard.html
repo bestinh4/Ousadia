@@ -1,26 +1,31 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Dashboard - Ousadia App</title>
-<link rel="stylesheet" href="style.css">
-<script type="module" src="firebase-config.js"></script>
-<script type="module" src="dashboard.js"></script>
+  <meta charset="UTF-8">
+  <title>PeladaApp - Dashboard</title>
+  <link rel="stylesheet" href="style.css">
+  <script type="module" src="dashboard.js"></script>
 </head>
-<body class="dashboard-page">
+<body>
   <header>
-    <h1>Dashboard</h1>
-    <button class="btn-logout" onclick="logout()">Sair</button>
+    <h1>PeladaApp</h1>
+    <button id="logout">Sair</button>
   </header>
 
   <main>
-    <div class="cards">
-      <a href="pre-jogo.html" class="card">Pré-Jogo</a>
-      <a href="ao-vivo.html" class="card">Ao Vivo</a>
-      <a href="pos-jogo.html" class="card">Pós-Jogo</a>
-      <a href="financeiro.html" class="card">Financeiro</a>
-    </div>
+    <section class="new-game">
+      <h2>Agendar Pelada</h2>
+      <input type="text" id="local" placeholder="Local">
+      <input type="date" id="data">
+      <input type="time" id="hora">
+      <input type="text" id="participantes" placeholder="Participantes separados por vírgula">
+      <button id="agendar">Agendar</button>
+    </section>
+
+    <section class="games-list">
+      <h2>Próximas Peladas</h2>
+      <ul id="listaPeladas"></ul>
+    </section>
   </main>
 </body>
 </html>
