@@ -3,9 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login - Ousadia App</title>
+  <title>Ousadia App - Login</title>
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
   <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
       font-family: 'Roboto', sans-serif;
       display: flex;
@@ -13,36 +14,74 @@
       justify-content: center;
       align-items: center;
       height: 100vh;
-      margin: 0;
-      background: linear-gradient(135deg, #f6d365, #fda085);
-      color: #333;
+      background: linear-gradient(135deg, #f093fb, #f5576c);
+      color: #fff;
+      overflow: hidden;
     }
 
     h1 {
-      margin-bottom: 40px;
-      font-size: 2rem;
+      font-size: 2.5rem;
+      margin-bottom: 50px;
       text-align: center;
+      animation: fadeInDown 1s ease-out;
     }
 
     button {
       background-color: #4285F4;
       color: #fff;
       border: none;
-      padding: 15px 30px;
-      font-size: 1rem;
-      border-radius: 10px;
+      padding: 18px 40px;
+      font-size: 1.1rem;
+      border-radius: 12px;
       cursor: pointer;
-      transition: background 0.3s ease;
+      transition: transform 0.3s ease, background 0.3s ease;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+      animation: fadeInUp 1s ease-out 0.5s forwards;
+      opacity: 0;
     }
 
     button:hover {
       background-color: #357ae8;
+      transform: scale(1.05);
+    }
+
+    /* Animations */
+    @keyframes fadeInDown {
+      0% { opacity: 0; transform: translateY(-50px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes fadeInUp {
+      0% { opacity: 0; transform: translateY(50px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Floating shapes */
+    .shape {
+      position: absolute;
+      border-radius: 50%;
+      opacity: 0.3;
+      animation: float 6s ease-in-out infinite alternate;
+    }
+
+    .shape1 { width: 100px; height: 100px; background: #ffdd59; top: 10%; left: 5%; animation-delay: 0s; }
+    .shape2 { width: 150px; height: 150px; background: #ff6b81; top: 70%; left: 80%; animation-delay: 2s; }
+    .shape3 { width: 80px; height: 80px; background: #1dd1a1; top: 40%; left: 50%; animation-delay: 1s; }
+
+    @keyframes float {
+      0% { transform: translateY(0) translateX(0); }
+      100% { transform: translateY(-20px) translateX(20px); }
     }
   </style>
-  <script type="module" src="firebase-config.js"></script>
 </head>
 <body>
+  <div class="shape shape1"></div>
+  <div class="shape shape2"></div>
+  <div class="shape shape3"></div>
+
   <h1>Bem-vindo ao Ousadia App</h1>
   <button onclick="loginGoogle()">Entrar com Google</button>
+
+  <script type="module" src="firebase-config.js"></script>
 </body>
 </html>
