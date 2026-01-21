@@ -1,31 +1,21 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-  <meta charset="UTF-8">
-  <title>PeladaApp - Dashboard</title>
-  <link rel="stylesheet" href="style.css">
-  <script type="module" src="dashboard.js"></script>
-</head>
-<body>
-  <header>
-    <h1>PeladaApp</h1>
-    <button id="logout">Sair</button>
-  </header>
+<main>
+  <section class="new-game">
+    <h2>Agendar Pelada</h2>
+    <input type="text" id="local" placeholder="Local">
+    <input type="date" id="data">
+    <input type="time" id="hora">
+    <input type="text" id="participantes" placeholder="Participantes separados por vírgula">
+    <button id="agendar">Agendar</button>
+  </section>
 
-  <main>
-    <section class="new-game">
-      <h2>Agendar Pelada</h2>
-      <input type="text" id="local" placeholder="Local">
-      <input type="date" id="data">
-      <input type="time" id="hora">
-      <input type="text" id="participantes" placeholder="Participantes separados por vírgula">
-      <button id="agendar">Agendar</button>
-    </section>
+  <section class="games-list">
+    <h2>Pré-Jogo</h2>
+    <ul id="preJogo"></ul>
 
-    <section class="games-list">
-      <h2>Próximas Peladas</h2>
-      <ul id="listaPeladas"></ul>
-    </section>
-  </main>
-</body>
-</html>
+    <h2>Ao Vivo</h2>
+    <ul id="aoVivo"></ul>
+
+    <h2>Pós-Jogo</h2>
+    <ul id="posJogo"></ul>
+  </section>
+</main>
