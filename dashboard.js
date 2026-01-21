@@ -30,27 +30,51 @@ document.getElementById("agendar").addEventListener("click", async () => {
       status: "agendada"
     });
 
-    alert("Pelada agendada com sucesso!");
+    document.getElementById("local").value = "";
+    document.getElementById("data").value = "";
+    document.getElementById("hora").value = "";
+    document.getElementById("participantes").value = "";
+
     carregarPeladas();
   } catch (err) {
     alert("Erro ao salvar: " + err.message);
   }
 });
 
-// Carregar peladas
+// Carregar peladas com separação por status
 async function carregarPeladas() {
-  const lista = document.getElementById("listaPeladas");
-  lista.innerHTML = "";
-  const q = query(collection(db, "partidas"));
-  const snapshot = await getDocs(q);
+  const listaPre = document.getElementById("preJogo");
+  const listaAoVivo = document.getElementById("aoVivo");
+  const listaPos = document.getElementById("posJogo");
+
+  listaPre.innerHTML = "";
+  listaAoVivo.innerHTML = "";
+  listaPos.innerHTML = "";
+
+  const snapshot = await getDocs(query(collection(db, "partidas"), orderBy("data")));
+  const agora = new Date();
 
   snapshot.forEach(docu => {
     const p = docu.data();
+    const dataHora = new Date(`${p.data}T${p.hora}`);
+    let container;
+
+    if (dataHora > agora) container = listaPre;
+    else if (dataHora <= agora && dataHora.getTime() + 2*60*60*1000 > agora.getTime()) container = listaAoVivo; // partida 2h
+    else container = listaPos;
+
     const li = document.createElement("li");
-    li.textContent = `${p.data} ${p.hora} - ${p.local} [${p.participantes.join(", ")}]`;
-    lista.appendChild(li);
+    li.className = "pelada-item";
+    li.innerHTML = `<strong>${p.local}</strong> - ${p.data} ${p.hora}<br>Jogadores: ${p.participantes.join(", ")}`;
+    container.appendChild(li);
+
+    // Animação suave
+    li.animate([
+      { opacity: 0, transform: "translateY(-20px)" },
+      { opacity: 1, transform: "translateY(0)" }
+    ], { duration: 400, easing: "ease-out" });
   });
 }
 
-// Carrega ao iniciar
+// Inicializa
 carregarPeladas();
