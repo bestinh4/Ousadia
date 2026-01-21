@@ -2,16 +2,103 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <title>Login - Ousadia App</title>
-  <link rel="stylesheet" href="style.css">
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js"></script>
-  <script src="firebase-config.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login Firebase Google</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f0f2f5;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .container {
+      background: #fff;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+    button {
+      padding: 12px 20px;
+      background: #4285F4;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 16px;
+      margin-top: 15px;
+    }
+    button:hover {
+      background: #357ae8;
+    }
+  </style>
 </head>
 <body>
-  <div class="container">
-    <h1>Bem-vindo ao Ousadia App</h1>
-    <button onclick="loginGoogle()" class="btn">Entrar com Google</button>
-  </div>
+
+<div class="container">
+  <h2>Entrar com Google</h2>
+  <button id="googleLogin">Entrar com Google</button>
+  <button id="googleLogout" style="display:none; background:#DB4437;">Sair</button>
+  <p id="userInfo"></p>
+</div>
+
+<!-- Firebase v9 -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
+  import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
+
+  // Configuração do Firebase
+  const firebaseConfig = {
+    apiKey: "AIzaSyADQZY0PLEcJUPjr2IxC5fjJmMgHXW3Eio",
+    authDomain: "ousadiaapp.firebaseapp.com",
+    projectId: "ousadiaapp",
+    storageBucket: "ousadiaapp.firebasestorage.app",
+    messagingSenderId: "736839415891",
+    appId: "1:736839415891:web:9335932f5aa4a5689a6ea6"
+  };
+
+  // Inicializar Firebase
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const provider = new GoogleAuthProvider();
+
+  const loginBtn = document.getElementById('googleLogin');
+  const logoutBtn = document.getElementById('googleLogout');
+  const userInfo = document.getElementById('userInfo');
+
+  // Login Google
+  loginBtn.addEventListener('click', () => {
+    signInWithPopup(auth, provider)
+      .then((result) => {
+        console.log("Usuário logado:", result.user.displayName);
+      })
+      .catch((error) => {
+        alert("Erro ao logar: " + error.message);
+      });
+  });
+
+  // Logout
+  logoutBtn.addEventListener('click', () => {
+    signOut(auth)
+      .then(() => console.log("Usuário saiu"))
+      .catch((error) => alert("Erro ao sair: " + error.message));
+  });
+
+  // Monitorar autenticação
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      userInfo.textContent = `Olá, ${user.displayName}`;
+      loginBtn.style.display = 'none';
+      logoutBtn.style.display = 'inline-block';
+    } else {
+      userInfo.textContent = '';
+      loginBtn.style.display = 'inline-block';
+      logoutBtn.style.display = 'none';
+    }
+  });
+</script>
+
 </body>
 </html>
