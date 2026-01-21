@@ -3,29 +3,15 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Ousadia App</title>
+<title>Ousadia App - Login</title>
 <link rel="stylesheet" href="style.css">
 <script type="module" src="firebase-config.js"></script>
+<script type="module" src="main.js"></script>
 </head>
-<body>
-<div class="login-container">
-  <h1>Ousadia App</h1>
-  <button class="btn-google" id="btnGoogle">Entrar com Google</button>
-</div>
-
-<script type="module">
-import { auth, provider, signInWithPopup } from './firebase-config.js';
-
-document.getElementById('btnGoogle').addEventListener('click', async () => {
-  try {
-    const result = await signInWithPopup(auth, provider);
-    const user = result.user;
-    // Redireciona para o dashboard após login
-    window.location.href = 'dashboard.html';
-  } catch (error) {
-    alert('Erro ao logar: ' + error.message);
-  }
-});
-</script>
+<body class="login-page">
+  <div class="login-container">
+    <h1>Ousadia App</h1>
+    <button class="btn-google" id="login-google">Entrar com Google</button>
+  </div>
 </body>
 </html>
