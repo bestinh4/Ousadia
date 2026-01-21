@@ -1,34 +1,28 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Ousadia - Dashboard</title>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js"></script>
-<script src="firebase-config.js"></script>
-<script>
-  auth.onAuthStateChanged(user => {
-    if (!user) {
-      // Usuário não logado → redireciona para login
-      window.location.href = 'index.html';
-    } else {
-      document.getElementById('user-name').innerText = user.displayName;
-    }
-  });
-
-  function logout() {
-    auth.signOut().then(() => {
-      window.location.href = 'index.html';
-    });
-  }
-</script>
+  <meta charset="UTF-8">
+  <title>Dashboard - Ousadia App</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js"></script>
+  <script src="firebase-config.js"></script>
 </head>
-<body style="padding:20px;font-family:sans-serif;">
-  <h1>Olá, <span id="user-name"></span> 👋</h1>
-  <button onclick="logout()" style="padding:8px 16px;background:red;color:white;border:none;border-radius:6px;cursor:pointer;margin-top:12px;">
-    Sair
-  </button>
-  <p>Este é seu painel Ousadia!</p>
+<body>
+  <div class="container">
+    <h1>Dashboard</h1>
+    <p id="welcome"></p>
+    <button onclick="logout()" class="btn">Sair</button>
+  </div>
+
+  <script>
+    auth.onAuthStateChanged(user => {
+      if (user) {
+        document.getElementById('welcome').innerText = `Olá, ${user.displayName}!`;
+      } else {
+        window.location.href = 'index.html'; // redireciona se não estiver logado
+      }
+    });
+  </script>
 </body>
 </html>
