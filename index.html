@@ -1,38 +1,42 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Ousadia - Login</title>
-<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
-<script src="https://cdn.tailwindcss.com"></script>
+<title>Login Ousadia</title>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script src="firebase-config.js"></script>
 <style>
-  body { font-family: 'Inter', sans-serif; background-color: #f5f5f5; }
+  body { font-family: Arial; text-align: center; margin-top: 100px; }
+  button { padding: 10px 20px; font-size: 16px; cursor: pointer; }
 </style>
 </head>
-<body class="flex items-center justify-center min-h-screen">
-<div class="bg-white p-6 rounded-xl shadow-lg w-96">
-  <h1 class="text-2xl font-bold mb-4 text-center">Ousadia</h1>
-  <button id="google-login" class="w-full bg-red-500 text-white py-2 rounded-lg mb-3 hover:bg-red-600">Entrar com Google</button>
-  <p class="text-center text-gray-500 text-sm">Você será redirecionado ao dashboard após login</p>
-</div>
+<body>
 
-<script src="firebase-config.js"></script>
+<h1>Bem-vindo ao Ousadia App</h1>
+<button id="googleLogin">Login com Google</button>
+
 <script>
-  const auth = firebase.auth();
+const auth = firebase.auth();
+const provider = new firebase.auth.GoogleAuthProvider();
 
-  document.getElementById('google-login').addEventListener('click', () => {
-    const provider = new firebase.auth.GoogleAuthProvider();
-    auth.signInWithPopup(provider)
-      .then((result) => {
-        // Login bem-sucedido
-        window.location.href = 'dashboard.html'; // redireciona para o dashboard
-      })
-      .catch((error) => {
-        alert("Erro ao logar: " + error.message);
-      });
-  });
+document.getElementById('googleLogin').addEventListener('click', () => {
+  auth.signInWithPopup(provider)
+    .then(result => {
+      // Login bem-sucedido, redireciona para dashboard
+      window.location.href = 'dashboard.html';
+    })
+    .catch(error => {
+      alert('Erro no login: ' + error.message);
+    });
+});
+
+// Verifica se já está logado
+auth.onAuthStateChanged(user => {
+  if(user) window.location.href = 'dashboard.html';
+});
 </script>
+
 </body>
 </html>
