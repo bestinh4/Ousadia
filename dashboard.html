@@ -3,39 +3,32 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Dashboard Ousadia</title>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<title>Ousadia - Dashboard</title>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js"></script>
 <script src="firebase-config.js"></script>
-<style>
-  body { font-family: Arial; text-align: center; margin-top: 100px; }
-  button { padding: 10px 20px; font-size: 16px; cursor: pointer; }
-</style>
-</head>
-<body>
-
-<h1>Dashboard</h1>
-<p>Bem-vindo, <span id="userName"></span>!</p>
-<button id="logout">Sair</button>
-
 <script>
-const auth = firebase.auth();
-
-auth.onAuthStateChanged(user => {
-  if(user){
-    document.getElementById('userName').innerText = user.displayName;
-  } else {
-    // Não logado, volta para login
-    window.location.href = 'index.html';
-  }
-});
-
-document.getElementById('logout').addEventListener('click', () => {
-  auth.signOut().then(() => {
-    window.location.href = 'index.html';
+  auth.onAuthStateChanged(user => {
+    if (!user) {
+      // Usuário não logado → redireciona para login
+      window.location.href = 'index.html';
+    } else {
+      document.getElementById('user-name').innerText = user.displayName;
+    }
   });
-});
-</script>
 
+  function logout() {
+    auth.signOut().then(() => {
+      window.location.href = 'index.html';
+    });
+  }
+</script>
+</head>
+<body style="padding:20px;font-family:sans-serif;">
+  <h1>Olá, <span id="user-name"></span> 👋</h1>
+  <button onclick="logout()" style="padding:8px 16px;background:red;color:white;border:none;border-radius:6px;cursor:pointer;margin-top:12px;">
+    Sair
+  </button>
+  <p>Este é seu painel Ousadia!</p>
 </body>
 </html>
