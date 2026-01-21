@@ -6,68 +6,21 @@
 <title>Dashboard - Ousadia App</title>
 <link rel="stylesheet" href="style.css">
 <script type="module" src="firebase-config.js"></script>
+<script type="module" src="dashboard.js"></script>
 </head>
-<body>
-<header>
-  <h1>Ousadia App</h1>
-  <button id="logoutBtn">Sair</button>
-</header>
+<body class="dashboard-page">
+  <header>
+    <h1>Dashboard</h1>
+    <button class="btn-logout" onclick="logout()">Sair</button>
+  </header>
 
-<nav class="menu">
-  <button data-section="prejogo">Pré-Jogo</button>
-  <button data-section="aovivo">Ao Vivo</button>
-  <button data-section="posjogo">Pós-Jogo</button>
-  <button data-section="financeiro">Financeiro</button>
-</nav>
-
-<main id="content">
-  <section id="prejogo" class="active">
-    <h2>Pré-Jogo</h2>
-    <div class="cards-container"></div>
-  </section>
-
-  <section id="aovivo">
-    <h2>Ao Vivo</h2>
-    <div class="cards-container"></div>
-  </section>
-
-  <section id="posjogo">
-    <h2>Pós-Jogo</h2>
-    <div class="cards-container"></div>
-  </section>
-
-  <section id="financeiro">
-    <h2>Financeiro</h2>
-    <div class="cards-container"></div>
-  </section>
-</main>
-
-<script type="module">
-import { auth, signOut, db, doc, setDoc } from './firebase-config.js';
-
-const sections = document.querySelectorAll('main section');
-document.querySelectorAll('.menu button').forEach(btn => {
-  btn.addEventListener('click', () => {
-    sections.forEach(sec => sec.classList.remove('active'));
-    document.getElementById(btn.dataset.section).classList.add('active');
-  });
-});
-
-// Logout
-document.getElementById('logoutBtn').addEventListener('click', async () => {
-  await signOut(auth);
-  window.location.href = 'index.html';
-});
-
-// Exemplo de salvar automaticamente Firestore
-auth.onAuthStateChanged(user => {
-  if(user){
-    const userRef = doc(db, 'users', user.uid);
-    setDoc(userRef, { lastLogin: new Date() }, { merge: true });
-  } else {
-    window.location.href = 'index.html';
-  }
-});
-</script>
+  <main>
+    <div class="cards">
+      <a href="pre-jogo.html" class="card">Pré-Jogo</a>
+      <a href="ao-vivo.html" class="card">Ao Vivo</a>
+      <a href="pos-jogo.html" class="card">Pós-Jogo</a>
+      <a href="financeiro.html" class="card">Financeiro</a>
+    </div>
+  </main>
 </body>
 </html>
