@@ -1,17 +1,37 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Ousadia App - Login</title>
-<link rel="stylesheet" href="style.css">
-<script type="module" src="firebase-config.js"></script>
-<script type="module" src="main.js"></script>
+  <meta charset="UTF-8">
+  <title>PeladaApp - Login</title>
+  <link rel="stylesheet" href="style.css">
+  <script type="module" src="firebase-config.js"></script>
 </head>
-<body class="login-page">
+<body>
   <div class="login-container">
-    <h1>Ousadia App</h1>
-    <button class="btn-google" id="login-google">Entrar com Google</button>
+    <h1>PeladaApp</h1>
+    <button id="loginGoogle">Entrar com Google</button>
   </div>
+
+  <script type="module">
+    import { auth, provider } from "./firebase-config.js";
+    import { signInWithPopup, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
+
+    const loginButton = document.getElementById("loginGoogle");
+
+    loginButton.addEventListener("click", async () => {
+      try {
+        await signInWithPopup(auth, provider);
+      } catch (err) {
+        alert("Erro ao logar: " + err.message);
+      }
+    });
+
+    onAuthStateChanged(auth, user => {
+      if (user) {
+        // Redireciona para o dashboard
+        window.location.href = "dashboard.html";
+      }
+    });
+  </script>
 </body>
 </html>
