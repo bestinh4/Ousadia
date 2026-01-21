@@ -1,6 +1,6 @@
 // firebase-config.js
 
-// 1️⃣ Configuração do Firebase
+// Configuração Firebase
 const firebaseConfig = {
   apiKey: "AIzaSyADQZY0PLEcJUPjr2IxC5fjJmMgHXW3Eio",
   authDomain: "ousadiaapp.firebaseapp.com",
@@ -10,26 +10,26 @@ const firebaseConfig = {
   appId: "1:736839415891:web:9335932f5aa4a5689a6ea6"
 };
 
-// 2️⃣ Inicializar Firebase
+// Inicializar Firebase
 firebase.initializeApp(firebaseConfig);
 
-// 3️⃣ Autenticação
+// Autenticação
 const auth = firebase.auth();
 const provider = new firebase.auth.GoogleAuthProvider();
 
-// 4️⃣ Função de login com Google
+// Login Google
 function loginGoogle() {
   auth.signInWithPopup(provider)
     .then(result => {
       console.log("Usuário logado:", result.user.displayName);
-      window.location.href = 'dashboard.html'; // Redireciona após login
+      window.location.href = 'dashboard.html';
     })
     .catch(error => {
       alert("Erro ao logar: " + error.message);
     });
 }
 
-// 5️⃣ Função de logout
+// Logout
 function logout() {
   auth.signOut()
     .then(() => {
@@ -40,7 +40,7 @@ function logout() {
     });
 }
 
-// 6️⃣ Monitorar estado de autenticação
+// Monitorar autenticação
 auth.onAuthStateChanged(user => {
   if (user) {
     console.log("Usuário ativo:", user.displayName);
