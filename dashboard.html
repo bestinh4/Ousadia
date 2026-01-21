@@ -1,44 +1,41 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Dashboard - Ousadia</title>
-<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
-<script src="https://cdn.tailwindcss.com"></script>
+<title>Dashboard Ousadia</title>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script src="firebase-config.js"></script>
 <style>
-  body { font-family: 'Inter', sans-serif; background-color: #f5f5f5; }
+  body { font-family: Arial; text-align: center; margin-top: 100px; }
+  button { padding: 10px 20px; font-size: 16px; cursor: pointer; }
 </style>
 </head>
-<body class="flex items-center justify-center min-h-screen">
-<div class="bg-white p-6 rounded-xl shadow-lg w-96 text-center">
-  <h1 class="text-2xl font-bold mb-4">Dashboard</h1>
-  <p id="user-info" class="mb-4 text-gray-700"></p>
-  <button id="logout" class="bg-gray-500 text-white py-2 px-4 rounded-lg hover:bg-gray-600">Sair</button>
-</div>
+<body>
 
-<script src="firebase-config.js"></script>
+<h1>Dashboard</h1>
+<p>Bem-vindo, <span id="userName"></span>!</p>
+<button id="logout">Sair</button>
+
 <script>
-  const auth = firebase.auth();
+const auth = firebase.auth();
 
-  // Checar login
-  auth.onAuthStateChanged((user) => {
-    if (user) {
-      // Usuário logado
-      document.getElementById('user-info').textContent = `Olá, ${user.displayName} (${user.email})`;
-    } else {
-      // Redirecionar para login
-      window.location.href = 'index.html';
-    }
-  });
+auth.onAuthStateChanged(user => {
+  if(user){
+    document.getElementById('userName').innerText = user.displayName;
+  } else {
+    // Não logado, volta para login
+    window.location.href = 'index.html';
+  }
+});
 
-  // Logout
-  document.getElementById('logout').addEventListener('click', () => {
-    auth.signOut().then(() => {
-      window.location.href = 'index.html';
-    });
+document.getElementById('logout').addEventListener('click', () => {
+  auth.signOut().then(() => {
+    window.location.href = 'index.html';
   });
+});
 </script>
+
 </body>
 </html>
