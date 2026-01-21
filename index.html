@@ -1,104 +1,131 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-br">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login Firebase Google</title>
+  <title>Dashboard</title>
   <style>
+    /* Reset básico */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Arial', sans-serif;
+    }
+
     body {
-      font-family: Arial, sans-serif;
-      background: #f0f2f5;
+      background: #f0f4f8;
+      color: #333;
       display: flex;
       justify-content: center;
       align-items: center;
       height: 100vh;
     }
-    .container {
+
+    .dashboard-container {
       background: #fff;
-      padding: 30px;
-      border-radius: 12px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      padding: 30px 40px;
+      border-radius: 15px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.1);
       text-align: center;
+      width: 90%;
+      max-width: 400px;
     }
-    button {
-      padding: 12px 20px;
-      background: #4285F4;
-      color: white;
+
+    .dashboard-container h1 {
+      font-size: 1.8rem;
+      margin-bottom: 20px;
+    }
+
+    .dashboard-container img {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-bottom: 20px;
+      border: 3px solid #4caf50;
+    }
+
+    .dashboard-container button {
+      background: #4caf50;
+      color: #fff;
       border: none;
-      border-radius: 6px;
+      padding: 12px 25px;
+      border-radius: 8px;
       cursor: pointer;
-      font-size: 16px;
-      margin-top: 15px;
+      font-size: 1rem;
+      transition: background 0.3s;
     }
-    button:hover {
-      background: #357ae8;
+
+    .dashboard-container button:hover {
+      background: #45a049;
+    }
+
+    .dashboard-container p {
+      margin-top: 15px;
+      color: #555;
+      font-size: 0.9rem;
     }
   </style>
 </head>
 <body>
+  <div class="dashboard-container">
+    <h1>Bem-vindo, <span id="nomeUsuario">...</span></h1>
+    <img id="fotoUsuario" src="https://via.placeholder.com/120" alt="Foto do usuário">
+    <br>
+    <button id="btnLogout">Sair</button>
+    <p>Seus dados estão seguros no Firestore.</p>
+  </div>
 
-<div class="container">
-  <h2>Entrar com Google</h2>
-  <button id="googleLogin">Entrar com Google</button>
-  <button id="googleLogout" style="display:none; background:#DB4437;">Sair</button>
-  <p id="userInfo"></p>
-</div>
+  <!-- Firebase e Config -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
+    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
+    import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
 
-<!-- Firebase v9 -->
-<script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
-  import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
+    // Config Firebase
+    const firebaseConfig = {
+      apiKey: "AIzaSyADQZY0PLEcJUPjr2IxC5fjJmMgHXW3Eio",
+      authDomain: "ousadiaapp.firebaseapp.com",
+      projectId: "ousadiaapp",
+      storageBucket: "ousadiaapp.firebasestorage.app",
+      messagingSenderId: "736839415891",
+      appId: "1:736839415891:web:9335932f5aa4a5689a6ea6"
+    };
 
-  // Configuração do Firebase
-  const firebaseConfig = {
-    apiKey: "AIzaSyADQZY0PLEcJUPjr2IxC5fjJmMgHXW3Eio",
-    authDomain: "ousadiaapp.firebaseapp.com",
-    projectId: "ousadiaapp",
-    storageBucket: "ousadiaapp.firebasestorage.app",
-    messagingSenderId: "736839415891",
-    appId: "1:736839415891:web:9335932f5aa4a5689a6ea6"
-  };
+    // Inicializando Firebase
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
 
-  // Inicializar Firebase
-  const app = initializeApp(firebaseConfig);
-  const auth = getAuth(app);
-  const provider = new GoogleAuthProvider();
+    const nomeUsuario = document.getElementById("nomeUsuario");
+    const fotoUsuario = document.getElementById("fotoUsuario");
+    const btnLogout = document.getElementById("btnLogout");
 
-  const loginBtn = document.getElementById('googleLogin');
-  const logoutBtn = document.getElementById('googleLogout');
-  const userInfo = document.getElementById('userInfo');
+    // Checa se usuário está logado
+    onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        const docRef = doc(db, "users", user.uid);
+        const docSnap = await getDoc(docRef);
 
-  // Login Google
-  loginBtn.addEventListener('click', () => {
-    signInWithPopup(auth, provider)
-      .then((result) => {
-        console.log("Usuário logado:", result.user.displayName);
-      })
-      .catch((error) => {
-        alert("Erro ao logar: " + error.message);
-      });
-  });
+        if (docSnap.exists()) {
+          const userData = docSnap.data();
+          nomeUsuario.textContent = userData.nome || user.displayName;
+          fotoUsuario.src = userData.foto || user.photoURL || "https://via.placeholder.com/120";
+        } else {
+          nomeUsuario.textContent = user.displayName || "Usuário";
+          fotoUsuario.src = user.photoURL || "https://via.placeholder.com/120";
+        }
+      } else {
+        window.location.href = "index.html"; // Redireciona se não logado
+      }
+    });
 
-  // Logout
-  logoutBtn.addEventListener('click', () => {
-    signOut(auth)
-      .then(() => console.log("Usuário saiu"))
-      .catch((error) => alert("Erro ao sair: " + error.message));
-  });
-
-  // Monitorar autenticação
-  onAuthStateChanged(auth, (user) => {
-    if (user) {
-      userInfo.textContent = `Olá, ${user.displayName}`;
-      loginBtn.style.display = 'none';
-      logoutBtn.style.display = 'inline-block';
-    } else {
-      userInfo.textContent = '';
-      loginBtn.style.display = 'inline-block';
-      logoutBtn.style.display = 'none';
-    }
-  });
-</script>
-
+    // Logout
+    btnLogout.addEventListener("click", async () => {
+      await signOut(auth);
+      window.location.href = "index.html";
+    });
+  </script>
 </body>
 </html>
