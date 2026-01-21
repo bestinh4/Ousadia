@@ -1,7 +1,7 @@
-// Importações Firebase v9
-import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js';
-import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js';
-import { getFirestore, doc, setDoc } from 'https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js';
+// Firebase v9 modular
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
+import { getAuth, GoogleAuthProvider, signInWithPopup, signOut } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
+import { getFirestore, collection, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyADQZY0PLEcJUPjr2IxC5fjJmMgHXW3Eio",
@@ -12,9 +12,27 @@ const firebaseConfig = {
   appId: "1:736839415891:web:9335932f5aa4a5689a6ea6"
 };
 
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const provider = new GoogleAuthProvider();
-const db = getFirestore(app);
+export const app = initializeApp(firebaseConfig);
+export const auth = getAuth(app);
+export const provider = new GoogleAuthProvider();
+export const db = getFirestore(app);
 
-export { auth, provider, signInWithPopup, signOut, onAuthStateChanged, db, doc, setDoc };
+// Login Google
+export async function loginGoogle() {
+  try {
+    const result = await signInWithPopup(auth, provider);
+    const user = result.user;
+    console.log("Usuário logado:", user.displayName);
+    // Redireciona para dashboard
+    window.location.href = "dashboard.html";
+  } catch (error) {
+    console.error("Erro login:", error);
+  }
+}
+
+// Logout
+export function logout() {
+  signOut(auth).then(() => {
+    window.location.href = "index.html";
+  });
+}
