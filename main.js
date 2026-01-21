@@ -1,5 +1,5 @@
 import { auth, provider, db } from './firebase-config.js';
-import { signInWithPopup } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
+import { signInWithPopup, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
 import { collection, addDoc, doc, getDoc } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
 
 const loginBtn = document.getElementById("loginBtn");
@@ -27,7 +27,17 @@ loginBtn.addEventListener("click", async () => {
       alert("Usuário já cadastrado no Firestore.");
     }
 
+    // Redireciona para o dashboard
+    window.location.href = "dashboard.html";
+
   } catch (error) {
     alert("Erro: " + error.message);
+  }
+});
+
+// Se já estiver logado, redireciona automaticamente
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    window.location.href = "dashboard.html";
   }
 });
