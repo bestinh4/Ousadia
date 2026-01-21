@@ -1,135 +1,73 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Ousadia App - Dashboard</title>
-  <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
-  <style>
-    body {
-      margin: 0;
-      font-family: 'Poppins', sans-serif;
-      background: linear-gradient(135deg, #ff0000, #ffffff 50%, #0000ff);
-      color: #fff;
-    }
-
-    header {
-      background: rgba(0,0,0,0.7);
-      padding: 15px 20px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-    }
-
-    header h1 {
-      margin: 0;
-      font-weight: 600;
-      font-size: 20px;
-    }
-
-    header button {
-      background-color: #fff;
-      color: #ff0000;
-      border: none;
-      padding: 8px 15px;
-      border-radius: 25px;
-      cursor: pointer;
-      transition: all 0.3s ease;
-    }
-
-    header button:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-    }
-
-    .cards {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-      gap: 20px;
-      padding: 20px;
-    }
-
-    .card {
-      background: rgba(0,0,0,0.6);
-      border-radius: 15px;
-      padding: 20px;
-      text-align: center;
-      box-shadow: 0 6px 18px rgba(0,0,0,0.3);
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-    }
-
-    .card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 10px 25px rgba(0,0,0,0.5);
-    }
-
-    .card h2 {
-      margin: 10px 0 0 0;
-      font-weight: 600;
-    }
-
-    .card p {
-      margin: 5px 0 0 0;
-      font-size: 14px;
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard - Ousadia App</title>
+<link rel="stylesheet" href="style.css">
+<script type="module" src="firebase-config.js"></script>
 </head>
 <body>
-  <header>
-    <h1>Ousadia App</h1>
-    <button id="logoutBtn">Sair</button>
-  </header>
+<header>
+  <h1>Ousadia App</h1>
+  <button id="logoutBtn">Sair</button>
+</header>
 
-  <div class="cards" id="userCards">
-    <!-- Usuários e dados do Firestore aparecerão aqui -->
-  </div>
+<nav class="menu">
+  <button data-section="prejogo">Pré-Jogo</button>
+  <button data-section="aovivo">Ao Vivo</button>
+  <button data-section="posjogo">Pós-Jogo</button>
+  <button data-section="financeiro">Financeiro</button>
+</nav>
 
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
-    import { getAuth, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
-    import { getFirestore, collection, getDocs, addDoc } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
+<main id="content">
+  <section id="prejogo" class="active">
+    <h2>Pré-Jogo</h2>
+    <div class="cards-container"></div>
+  </section>
 
-    const firebaseConfig = {
-      apiKey: "AIzaSyADQZY0PLEcJUPjr2IxC5fjJmMgHXW3Eio",
-      authDomain: "ousadiaapp.firebaseapp.com",
-      projectId: "ousadiaapp",
-      storageBucket: "ousadiaapp.firebasestorage.app",
-      messagingSenderId: "736839415891",
-      appId: "1:736839415891:web:9335932f5aa4a5689a6ea6"
-    };
+  <section id="aovivo">
+    <h2>Ao Vivo</h2>
+    <div class="cards-container"></div>
+  </section>
 
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    const db = getFirestore(app);
+  <section id="posjogo">
+    <h2>Pós-Jogo</h2>
+    <div class="cards-container"></div>
+  </section>
 
-    const userCards = document.getElementById("userCards");
+  <section id="financeiro">
+    <h2>Financeiro</h2>
+    <div class="cards-container"></div>
+  </section>
+</main>
 
-    // Monitorar login
-    onAuthStateChanged(auth, async user => {
-      if (!user) {
-        window.location.href = "index.html";
-      } else {
-        // Pegar usuários do Firestore
-        const querySnapshot = await getDocs(collection(db, "usuarios"));
-        userCards.innerHTML = "";
-        querySnapshot.forEach(doc => {
-          const data = doc.data();
-          userCards.innerHTML += `
-            <div class="card">
-              <h2>${data.nome || user.displayName}</h2>
-              <p>${data.email || user.email}</p>
-            </div>
-          `;
-        });
-      }
-    });
+<script type="module">
+import { auth, signOut, db, doc, setDoc } from './firebase-config.js';
 
-    // Logout
-    document.getElementById("logoutBtn").addEventListener("click", () => {
-      signOut(auth);
-    });
-  </script>
+const sections = document.querySelectorAll('main section');
+document.querySelectorAll('.menu button').forEach(btn => {
+  btn.addEventListener('click', () => {
+    sections.forEach(sec => sec.classList.remove('active'));
+    document.getElementById(btn.dataset.section).classList.add('active');
+  });
+});
+
+// Logout
+document.getElementById('logoutBtn').addEventListener('click', async () => {
+  await signOut(auth);
+  window.location.href = 'index.html';
+});
+
+// Exemplo de salvar automaticamente Firestore
+auth.onAuthStateChanged(user => {
+  if(user){
+    const userRef = doc(db, 'users', user.uid);
+    setDoc(userRef, { lastLogin: new Date() }, { merge: true });
+  } else {
+    window.location.href = 'index.html';
+  }
+});
+</script>
 </body>
 </html>
