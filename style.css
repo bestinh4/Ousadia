@@ -1,36 +1,96 @@
+/* Paleta Croácia: azul escuro, vermelho, branco */
+:root {
+  --primary: #ff0000;
+  --secondary: #0050a0;
+  --white: #ffffff;
+  --bg: #f2f2f2;
+}
+
 body {
-  font-family: Arial, sans-serif;
-  background: #f2f9ff;
-  margin: 0;
-  display: flex;
-  justify-content: center;
+  margin:0;
+  font-family: 'Arial', sans-serif;
+  background: url('futebol-bg.jpg') no-repeat center center fixed;
+  background-size: cover;
+  color: var(--white);
+}
+
+header {
+  display:flex;
+  justify-content: space-between;
   align-items: center;
-  height: 100vh;
+  background-color: var(--secondary);
+  padding: 10px 20px;
 }
 
-.container {
-  text-align: center;
-  background: #ffffff;
-  padding: 40px;
-  border-radius: 12px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+header h1 { font-size: 1.5rem; }
+
+.menu {
+  display:flex;
+  justify-content: space-around;
+  background-color: var(--primary);
 }
 
-h1 {
-  color: #1e88e5;
+.menu button {
+  background:none;
+  border:none;
+  color: var(--white);
+  padding:10px 20px;
+  font-weight:bold;
+  cursor:pointer;
+  transition:0.3s;
 }
 
-.btn {
-  background-color: #1e88e5;
-  color: white;
-  border: none;
-  padding: 12px 24px;
-  font-size: 16px;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: 0.3s;
+.menu button:hover {
+  background-color: var(--white);
+  color: var(--primary);
 }
 
-.btn:hover {
-  background-color: #1565c0;
+main {
+  padding:20px;
+}
+
+section {
+  display:none;
+  animation: fadeIn 0.5s ease-in;
+}
+
+section.active {
+  display:block;
+}
+
+.cards-container {
+  display:grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap:15px;
+}
+
+.cards-container .card {
+  background-color: rgba(0,0,0,0.7);
+  padding:15px;
+  border-radius:10px;
+  transition: transform 0.3s;
+}
+
+.cards-container .card:hover {
+  transform: scale(1.05);
+}
+
+.btn-google {
+  background-color: #ff0000;
+  color: var(--white);
+  border:none;
+  padding:12px 20px;
+  border-radius:8px;
+  font-weight:bold;
+  cursor:pointer;
+  transition:0.3s;
+}
+
+.btn-google:hover {
+  background-color:#0050a0;
+}
+
+@keyframes fadeIn {
+  from {opacity:0;}
+  to {opacity:1;}
 }
